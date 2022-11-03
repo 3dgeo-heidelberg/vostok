@@ -140,6 +140,8 @@ int main(int argc, char* argv[]) {
 
 
 			std::ofstream shadowOutfile;
+			shadowOutfile.open(shadowOutfilePath.str().c_str());
+			shadowOutfile << std::setprecision(3);
 
 			IrradianceCalc irrCalc(solpos);
 
@@ -194,6 +196,7 @@ int main(int argc, char* argv[]) {
 
 					std::vector<double> p = queryPoints.getNextPoint();
 
+
 					bool illuminated = true;
 					double elevation_deg = solpos.elevref;
 					if (elevation_deg >= cfg.m_minSunAngle)
@@ -204,11 +207,6 @@ int main(int argc, char* argv[]) {
 							illuminated = shadowCalc.computeShadow(solpos, p);
 
 							if (cfg.m_computeShadows > 1) {
-
-								if (!shadowOutfile.good()) {
-									shadowOutfile.open(shadowOutfilePath.str().c_str());
-									shadowOutfile << std::setprecision(3);
-								}
 
 								shadowOutfile << std::fixed << p[0] << " " << std::fixed << p[1] << " " << std::fixed << p[2] << " " << illuminated << std::endl;
 							}
