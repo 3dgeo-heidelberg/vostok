@@ -136,7 +136,8 @@ int main(int argc, char* argv[]) {
 			// Construct shadow output file name:
 			std::ostringstream shadowOutfilePath;
 			shadowOutfilePath << std::setfill('0');
-			shadowOutfilePath << solpos.year << "-" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << ":" << std::setw(2) << solpos.minute << "_shadow.txt";
+			shadowOutfilePath << solpos.year << "_" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << "-" << std::setw(2) << solpos.minute << "_shadow.txt";
+
 
 			std::ofstream shadowOutfile;
 
