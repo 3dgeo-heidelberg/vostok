@@ -166,9 +166,7 @@ void SimpleTextPointCloud::resetCursor() {
 
 	mLineNumber = 0;
 	mCursorPos = 0;
-
-	// TODO 3: Check if this really works
-	mSourceFile->seekg(0);
+	mSourceFile->seekg(0, mSourceFile->beg);
 }
 
 
