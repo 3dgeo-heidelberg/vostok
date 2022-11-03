@@ -13,7 +13,7 @@ The Linke atmospheric turbidity coefficient, which models the atmospheric absorp
 
 ## Using VOSTOK
 ### Precompiled 
-Pre-compiled binaries (32 bit and 64 bit) can be downloaded [here](https://heibox.uni-heidelberg.de/d/9d00e2b1f2e345d9b6df/).<br>
+Pre-compiled binaries (64 bit) can be downloaded [here](https://heibox.uni-heidelberg.de/d/9d00e2b1f2e345d9b6df/).<br>
 For faster simulations compiling VOSTOK on your specific system is recommended.
 
 ### Building VOSTOK
