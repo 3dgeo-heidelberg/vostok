@@ -175,7 +175,7 @@ Heidelberg University
 
 [http://www.uni-heidelberg.de/3dgeo](http://www.uni-heidelberg.de/3dgeo)
 
-Source code repository: [https://github.com/GIScience/vostok](https://github.com/GIScience/vostok)
+Source code repository: [https://github.com/3dgeo-heidelberg/vostok](https://github.com/3dgeo-heidelberg/vostok)
 
 ### How to cite
 
