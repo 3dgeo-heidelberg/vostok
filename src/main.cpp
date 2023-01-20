@@ -8,6 +8,14 @@
 #include <sstream>
 #include <omp.h>
 
+#if __cplusplus < 201703L // If the version of C++ is less than 17
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#else
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
+
 #include "pointCloud/SimpleTextPointCloud.h"
 #include "IrradianceCalc.h"
 #include "ShadowCalc.h"
@@ -85,6 +93,12 @@ int main(int argc, char* argv[]) {
 
 	ShadowCalc shadowCalc(shadowPoints, cfg.mVoxelSize);
 
+	//Create subdirectory for shadow point clouds
+	if (cfg.m_computeShadows >= 2) {
+		fs::create_directory("shadow_clouds");
+		std::cout << "Single shadow point clouds are written to sub-directory: shadow_cloud" << std::endl;
+	}
+
 	std::cout << "Computing irradiation for each query point..." << std::endl << std::flush;
 
 	// Prepare vector for irradiation for all points over entire measurement time:
@@ -136,8 +150,7 @@ int main(int argc, char* argv[]) {
 			// Construct shadow output file name:
 			std::ostringstream shadowOutfilePath;
 			shadowOutfilePath << std::setfill('0');
-			shadowOutfilePath << solpos.year << "_" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << "-" << std::setw(2) << solpos.minute << "_shadow.txt";
-
+			shadowOutfilePath << ".\\shadow_clouds\\" << solpos.year << "_" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << "-" << std::setw(2) << solpos.minute << "_shadow.txt";
 
 			std::ofstream shadowOutfile;
 			shadowOutfile.open(shadowOutfilePath.str().c_str());
