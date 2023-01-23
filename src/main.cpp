@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
 	ShadowCalc shadowCalc(shadowPoints, cfg.mVoxelSize);
 
 	//Create subdirectory for shadow point clouds
-	if (cfg.m_computeShadows >= 2) {
+	if (cfg.m_computeShadows > 1) {
 		fs::create_directory("shadow_clouds");
 		std::cout << "Single shadow point clouds are written to sub-directory: shadow_cloud" << std::endl;
 	}
@@ -147,15 +147,16 @@ int main(int argc, char* argv[]) {
 
 			//######## BEGIN Compute irradiation for the current minute step for each query point #########
 
-			// Construct shadow output file name:
 			std::ostringstream shadowOutfilePath;
-			shadowOutfilePath << std::setfill('0');
-			shadowOutfilePath << ".\\shadow_clouds\\" << solpos.year << "_" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << "-" << std::setw(2) << solpos.minute << "_shadow.txt";
-
 			std::ofstream shadowOutfile;
-			shadowOutfile.open(shadowOutfilePath.str().c_str());
-			shadowOutfile << std::setprecision(3);
+			if (cfg.m_computeShadows > 1) {
+				// Construct shadow output file name:
+				shadowOutfilePath << std::setfill('0');
+				shadowOutfilePath << ".\\shadow_clouds\\" << solpos.year << "_" << std::setw(3) << solpos.daynum << "_" << std::setw(2) << solpos.hour << "-" << std::setw(2) << solpos.minute << "_shadow.txt";
 
+				shadowOutfile.open(shadowOutfilePath.str().c_str());
+				shadowOutfile << std::setprecision(3);
+			}
 			IrradianceCalc irrCalc(solpos);
 
 			// Prepare vector for irradiation for all points over current minute step:
@@ -216,18 +217,18 @@ int main(int argc, char* argv[]) {
 					{
 
 						if (cfg.m_computeShadows > 0) {
-
 							illuminated = shadowCalc.computeShadow(solpos, p);
-
-							if (cfg.m_computeShadows > 1) {
-
-								shadowOutfile << std::fixed << p[0] << " " << std::fixed << p[1] << " " << std::fixed << p[2] << " " << illuminated << std::endl;
-							}
 						}
 					}
 					else {
 						illuminated = false;
 					}
+
+					if (cfg.m_computeShadows > 1) {
+
+						shadowOutfile << std::fixed << p[0] << " " << std::fixed << p[1] << " " << std::fixed << p[2] << " " << illuminated << std::endl;
+					}
+
 					// Compute irradiance for current time step (energy for moment with no time unit):
 					double irr = irrCalc.getIrradiance(p, illuminated);
 
@@ -237,9 +238,10 @@ int main(int argc, char* argv[]) {
 				//##################### END Single-threaded version ######################
 			}
 
-			// Close shadow output file:
-			shadowOutfile.close();
-
+			if (cfg.m_computeShadows > 1) {
+				// Close shadow output file:
+				shadowOutfile.close();
+			}
 			//########## END Compute irradiation for the current minute step for each query point ##########
 
 			//######### BEGIN Get number of sunny minutes in current time step in order to compute irradiation ###########
